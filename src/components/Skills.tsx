@@ -1,36 +1,80 @@
-import { motion } from "framer-motion";
+import { motion, useInView } from "framer-motion";
+import { useRef } from "react";
 import { Code, Database, Brain, BarChart3, Users, Lightbulb } from "lucide-react";
+import { Progress } from "./ui/progress";
 
 const skillCategories = [
   {
     title: "Programming Languages",
     icon: Code,
-    skills: ["Python 🐍", "C++ ⚙️", "SQL 🗃️", "JavaScript 🌐", "HTML/CSS 🎨", "PHP 💻"],
+    skills: [
+      { name: "Python", level: 90 },
+      { name: "C++", level: 85 },
+      { name: "SQL", level: 80 },
+      { name: "JavaScript", level: 75 },
+      { name: "HTML/CSS", level: 85 },
+      { name: "PHP", level: 70 },
+    ],
   },
   {
     title: "Data Science & ML",
     icon: Brain,
-    skills: ["Pandas", "NumPy", "Scikit-learn", "TensorFlow", "Keras", "PyTorch"],
+    skills: [
+      { name: "Pandas", level: 88 },
+      { name: "NumPy", level: 85 },
+      { name: "Scikit-learn", level: 82 },
+      { name: "TensorFlow", level: 75 },
+      { name: "Keras", level: 78 },
+      { name: "PyTorch", level: 70 },
+    ],
   },
   {
     title: "Data Visualization",
     icon: BarChart3,
-    skills: ["Matplotlib", "Seaborn", "Plotly", "Tableau", "Power BI", "D3.js"],
+    skills: [
+      { name: "Matplotlib", level: 85 },
+      { name: "Seaborn", level: 85 },
+      { name: "Plotly", level: 80 },
+      { name: "Tableau", level: 75 },
+      { name: "Power BI", level: 72 },
+      { name: "D3.js", level: 65 },
+    ],
   },
   {
     title: "Tools & Platforms",
     icon: Database,
-    skills: ["Jupyter", "VS Code", "Git/GitHub", "MySQL", "MongoDB", "Docker"],
+    skills: [
+      { name: "Jupyter", level: 90 },
+      { name: "VS Code", level: 88 },
+      { name: "Git/GitHub", level: 85 },
+      { name: "MySQL", level: 80 },
+      { name: "MongoDB", level: 75 },
+      { name: "Docker", level: 70 },
+    ],
   },
   {
     title: "Data Analytics",
     icon: Lightbulb,
-    skills: ["Data Wrangling", "EDA", "Statistical Analysis", "Feature Engineering", "Model Evaluation", "A/B Testing"],
+    skills: [
+      { name: "Data Wrangling", level: 90 },
+      { name: "EDA", level: 88 },
+      { name: "Statistical Analysis", level: 85 },
+      { name: "Feature Engineering", level: 82 },
+      { name: "Model Evaluation", level: 80 },
+      { name: "A/B Testing", level: 75 },
+    ],
   },
   {
     title: "Soft Skills",
     icon: Users,
-    skills: ["Analytical Thinking", "Problem Solving", "Communication", "Team Collaboration", "Time Management", "Adaptability"],
+    skills: [
+      { name: "Analytical Thinking", level: 92 },
+      { name: "Problem Solving", level: 90 },
+      { name: "Communication", level: 85 },
+      { name: "Team Collaboration", level: 88 },
+      { name: "Time Management", level: 85 },
+      { name: "Adaptability", level: 90 },
+    ],
   },
 ];
 
@@ -55,40 +99,68 @@ export function Skills() {
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
           {skillCategories.map((category, categoryIndex) => (
-            <motion.div
-              key={category.title}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: categoryIndex * 0.1 }}
-              className="backdrop-blur-xl bg-card p-6 rounded-2xl border border-border shadow-lg hover:shadow-2xl hover:border-primary/30 transition-all group"
-            >
-              <div className="flex items-center gap-3 mb-6">
-                <div className="p-3 rounded-xl bg-gradient-primary/10 text-primary group-hover:scale-110 transition-transform">
-                  <category.icon className="h-6 w-6" />
-                </div>
-                <h3 className="text-xl font-bold">{category.title}</h3>
-              </div>
-
-              <div className="flex flex-wrap gap-2">
-                {category.skills.map((skill, skillIndex) => (
-                  <motion.div
-                    key={skill}
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.3, delay: categoryIndex * 0.1 + skillIndex * 0.05 }}
-                    whileHover={{ scale: 1.05 }}
-                    className="px-3 py-2 rounded-lg bg-primary/5 border border-primary/20 text-sm font-medium hover:bg-primary/10 hover:border-primary/40 transition-all cursor-default"
-                  >
-                    {skill}
-                  </motion.div>
-                ))}
-              </div>
-            </motion.div>
+            <SkillCard key={category.title} category={category} index={categoryIndex} />
           ))}
         </div>
       </div>
     </section>
+  );
+}
+
+function SkillCard({ category, index }: { category: typeof skillCategories[0]; index: number }) {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, amount: 0.3 });
+
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.5, delay: index * 0.1 }}
+      className="backdrop-blur-xl bg-card p-6 rounded-2xl border border-border shadow-lg hover:shadow-2xl hover:border-primary/30 transition-all duration-300 group hover:scale-[1.02]"
+    >
+      <div className="flex items-center gap-3 mb-6">
+        <div className="p-3 rounded-xl bg-gradient-primary/10 text-primary group-hover:scale-110 transition-transform duration-300 group-hover:shadow-lg group-hover:shadow-primary/20">
+          <category.icon className="h-6 w-6" />
+        </div>
+        <h3 className="text-xl font-bold">{category.title}</h3>
+      </div>
+
+      <div className="space-y-4">
+        {category.skills.map((skill, skillIndex) => (
+          <motion.div
+            key={skill.name}
+            initial={{ opacity: 0, x: -20 }}
+            animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
+            transition={{ duration: 0.3, delay: index * 0.1 + skillIndex * 0.05 }}
+            className="space-y-2"
+          >
+            <div className="flex justify-between items-center">
+              <span className="text-sm font-medium">{skill.name}</span>
+              <motion.span
+                initial={{ opacity: 0 }}
+                animate={isInView ? { opacity: 1 } : { opacity: 0 }}
+                transition={{ duration: 0.3, delay: index * 0.1 + skillIndex * 0.05 + 0.3 }}
+                className="text-xs text-muted-foreground font-semibold"
+              >
+                {skill.level}%
+              </motion.span>
+            </div>
+            <motion.div
+              initial={{ scaleX: 0 }}
+              animate={isInView ? { scaleX: 1 } : { scaleX: 0 }}
+              transition={{ duration: 0.8, delay: index * 0.1 + skillIndex * 0.05 + 0.2, ease: "easeOut" }}
+              className="origin-left"
+            >
+              <Progress 
+                value={skill.level} 
+                className="h-2 bg-primary/10 group-hover:shadow-sm group-hover:shadow-primary/20 transition-shadow" 
+              />
+            </motion.div>
+          </motion.div>
+        ))}
+      </div>
+    </motion.div>
   );
 }

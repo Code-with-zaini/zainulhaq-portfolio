@@ -7,11 +7,14 @@ import { Skills } from "@/components/Skills";
 import { Projects } from "@/components/Projects";
 import { Achievements } from "@/components/Achievements";
 import { Contact } from "@/components/Contact";
+import { ScrollProgress } from "@/components/ScrollProgress";
+import { BackToTop } from "@/components/BackToTop";
 
 const Index = () => {
   return (
     <ThemeProvider>
       <div className="min-h-screen">
+        <ScrollProgress />
         <Navigation />
         <Hero />
         <About />
@@ -20,6 +23,7 @@ const Index = () => {
         <Projects />
         <Achievements />
         <Contact />
+        <BackToTop />
       </div>
     </ThemeProvider>
   );
