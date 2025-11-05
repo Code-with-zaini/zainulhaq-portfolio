@@ -9,21 +9,29 @@ import { Achievements } from "@/components/Achievements";
 import { Contact } from "@/components/Contact";
 import { ScrollProgress } from "@/components/ScrollProgress";
 import { BackToTop } from "@/components/BackToTop";
+import { ParticleBackground } from "@/components/ParticleBackground";
+import { Preloader } from "@/components/Preloader";
+import { ChatbotWidget } from "@/components/ChatbotWidget";
 
 const Index = () => {
   return (
     <ThemeProvider>
-      <div className="min-h-screen">
+      <Preloader />
+      <div className="min-h-screen relative">
+        <ParticleBackground />
         <ScrollProgress />
-        <Navigation />
-        <Hero />
-        <About />
-        <Education />
-        <Skills />
-        <Projects />
-        <Achievements />
-        <Contact />
+        <div className="relative z-10">
+          <Navigation />
+          <Hero />
+          <About />
+          <Education />
+          <Skills />
+          <Projects />
+          <Achievements />
+          <Contact />
+        </div>
         <BackToTop />
+        <ChatbotWidget />
       </div>
     </ThemeProvider>
   );
