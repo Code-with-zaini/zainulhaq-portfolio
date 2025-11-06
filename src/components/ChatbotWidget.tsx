@@ -3,7 +3,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { MessageCircle, X, Send, Download } from 'lucide-react';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
-import { Robot3D } from './Robot3D';
 
 interface Message {
   role: 'user' | 'assistant';
@@ -138,20 +137,6 @@ export function ChatbotWidget() {
 
   return (
     <div className="fixed bottom-8 right-8 z-50 flex flex-col items-end gap-4">
-      {/* Robot */}
-      <AnimatePresence>
-        {!isOpen && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0 }}
-            transition={{ delay: 2 }}
-          >
-            <Robot3D onInteraction={() => setIsOpen(true)} />
-          </motion.div>
-        )}
-      </AnimatePresence>
-
       {/* Chat toggle button */}
       <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
         <Button

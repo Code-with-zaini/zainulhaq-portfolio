@@ -103,9 +103,9 @@ export function Preloader() {
             className="text-center"
           >
             <h2 className="text-2xl font-bold bg-gradient-primary bg-clip-text text-transparent mb-2">
-              Initializing Zain ul Haq
+              Initializing...
             </h2>
-            <p className="text-muted-foreground">AI Portfolio Environment...</p>
+            <p className="text-muted-foreground">Zain ul Haq Portfolio</p>
             
             {/* Progress bar */}
             <div className="mt-6 w-64">
