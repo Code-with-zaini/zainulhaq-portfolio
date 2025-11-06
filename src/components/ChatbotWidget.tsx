@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MessageCircle, X, Send } from 'lucide-react';
+import { MessageCircle, X, Send, Download } from 'lucide-react';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Robot3D } from './Robot3D';
@@ -30,19 +30,34 @@ export function ChatbotWidget() {
     scrollToBottom();
   }, [messages]);
 
+  useEffect(() => {
+    // Listen for contact form submissions
+    const handleContactSubmit = () => {
+      setMessages((prev) => [
+        ...prev,
+        { role: 'assistant', content: "✅ Message sent! Zain will reply to you soon. Thanks for reaching out!" },
+      ]);
+    };
+
+    window.addEventListener('contact-form-submitted', handleContactSubmit);
+    return () => window.removeEventListener('contact-form-submitted', handleContactSubmit);
+  }, []);
+
   const quickCommands = [
     { label: 'Show projects', action: 'projects' },
     { label: 'Show education', action: 'education' },
     { label: 'Show skills', action: 'skills' },
+    { label: 'Download CV', action: 'download-cv' },
     { label: 'Contact info', action: 'contact' },
   ];
 
   const handleQuickCommand = (action: string) => {
     const responses: Record<string, string> = {
-      projects: "Great! Let me scroll to Zain's projects section for you.",
-      education: "Perfect! I'll show you Zain's educational background.",
-      skills: "Excellent choice! Here are Zain's technical skills.",
-      contact: "Here's how you can reach Zain:\n📧 Email: zainulhaq@example.com\n💼 LinkedIn: linkedin.com/in/zainulhaq",
+      projects: "Great! Let me scroll to Zain's projects section for you. 🚀",
+      education: "Perfect! I'll show you Zain's educational background. 🎓",
+      skills: "Excellent choice! Here are Zain's technical skills. 💻",
+      'download-cv': "📥 You can download Zain's CV by scrolling down to the Contact section and clicking the 'Download Resume' button!",
+      contact: "Here's how you can reach Zain:\n\n📧 Email: zain@example.com\n💼 LinkedIn: linkedin.com/in/zain-ul-haq\n🐙 GitHub: github.com/Code-with-zaini\n\nOr scroll down to fill out the contact form!",
     };
 
     setMessages((prev) => [
@@ -59,9 +74,14 @@ export function ChatbotWidget() {
       setIsTyping(false);
 
       // Scroll to section
-      if (action !== 'contact') {
+      if (action !== 'contact' && action !== 'download-cv') {
         setTimeout(() => {
           const element = document.getElementById(action);
+          element?.scrollIntoView({ behavior: 'smooth' });
+        }, 500);
+      } else if (action === 'download-cv' || action === 'contact') {
+        setTimeout(() => {
+          const element = document.getElementById('contact');
           element?.scrollIntoView({ behavior: 'smooth' });
         }, 500);
       }
@@ -76,25 +96,42 @@ export function ChatbotWidget() {
     setInput('');
     setIsTyping(true);
 
-    // Simple response logic
+    // Enhanced response logic
     setTimeout(() => {
-      let response = "I'm a simple assistant right now. Try using the quick commands below!";
+      const lowerMsg = userMessage.toLowerCase();
       
-      if (userMessage.toLowerCase().includes('project')) {
+      if (lowerMsg.includes('project')) {
         handleQuickCommand('projects');
         return;
-      } else if (userMessage.toLowerCase().includes('education') || userMessage.toLowerCase().includes('study')) {
+      } else if (lowerMsg.includes('education') || lowerMsg.includes('study') || lowerMsg.includes('university')) {
         handleQuickCommand('education');
         return;
-      } else if (userMessage.toLowerCase().includes('skill')) {
+      } else if (lowerMsg.includes('skill') || lowerMsg.includes('tech') || lowerMsg.includes('language')) {
         handleQuickCommand('skills');
         return;
-      } else if (userMessage.toLowerCase().includes('contact') || userMessage.toLowerCase().includes('email')) {
+      } else if (lowerMsg.includes('cv') || lowerMsg.includes('resume') || lowerMsg.includes('download')) {
+        handleQuickCommand('download-cv');
+        return;
+      } else if (lowerMsg.includes('contact') || lowerMsg.includes('email') || lowerMsg.includes('reach') || lowerMsg.includes('message')) {
         handleQuickCommand('contact');
         return;
+      } else if (lowerMsg.includes('who') || lowerMsg.includes('about')) {
+        setMessages((prev) => [...prev, { 
+          role: 'assistant', 
+          content: "Zain ul Haq is a Data Science student at IST with expertise in Python, C++, SQL, and Machine Learning. He's passionate about AI and building innovative solutions! 🚀" 
+        }]);
+      } else if (lowerMsg.includes('hello') || lowerMsg.includes('hi') || lowerMsg.includes('hey')) {
+        setMessages((prev) => [...prev, { 
+          role: 'assistant', 
+          content: "Hello! 👋 I'm here to help you learn more about Zain. Feel free to ask about his projects, skills, education, or how to contact him!" 
+        }]);
+      } else {
+        setMessages((prev) => [...prev, { 
+          role: 'assistant', 
+          content: "I can help you with:\n• Zain's projects 🚀\n• His education & skills 🎓\n• Contact information 📧\n• Download his CV 📥\n\nTry using the quick commands below!" 
+        }]);
       }
-
-      setMessages((prev) => [...prev, { role: 'assistant', content: response }]);
+      
       setIsTyping(false);
     }, 1000);
   };

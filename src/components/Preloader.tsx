@@ -30,28 +30,69 @@ export function Preloader() {
           transition={{ duration: 0.5 }}
           className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-background"
         >
-          {/* Animated spinner */}
+          {/* Enhanced Animated spinner with gradient rings */}
           <motion.div
-            className="relative w-24 h-24 mb-8"
+            className="relative w-32 h-32 mb-8"
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 0.5 }}
           >
+            {/* Outer glowing ring */}
             <motion.div
-              className="absolute inset-0 rounded-full border-4 border-primary/20"
+              className="absolute inset-0 rounded-full"
+              style={{
+                background: 'conic-gradient(from 0deg, hsl(var(--primary)), hsl(var(--primary)/0.3), hsl(var(--primary)))',
+                filter: 'blur(8px)',
+              }}
               animate={{ rotate: 360 }}
+              transition={{ duration: 3, repeat: Infinity, ease: 'linear' }}
+            />
+            
+            {/* Middle ring */}
+            <motion.div
+              className="absolute inset-2 rounded-full border-4 border-transparent"
+              style={{
+                borderTopColor: 'hsl(var(--primary))',
+                borderRightColor: 'hsl(var(--primary)/0.5)',
+              }}
+              animate={{ rotate: -360 }}
               transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
             />
+            
+            {/* Inner pulsing core */}
             <motion.div
-              className="absolute inset-0 rounded-full border-4 border-transparent border-t-primary border-r-primary"
-              animate={{ rotate: 360 }}
-              transition={{ duration: 1.5, repeat: Infinity, ease: 'linear' }}
-            />
-            <motion.div
-              className="absolute inset-4 rounded-full bg-gradient-primary opacity-20"
-              animate={{ scale: [1, 1.2, 1], opacity: [0.2, 0.4, 0.2] }}
+              className="absolute inset-8 rounded-full bg-gradient-primary"
+              animate={{ 
+                scale: [1, 1.3, 1],
+                opacity: [0.3, 0.6, 0.3]
+              }}
               transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
             />
+            
+            {/* Glowing dots around the circle */}
+            {[0, 60, 120, 180, 240, 300].map((angle) => (
+              <motion.div
+                key={angle}
+                className="absolute w-2 h-2 bg-primary rounded-full"
+                style={{
+                  top: '50%',
+                  left: '50%',
+                  transformOrigin: '0 0',
+                }}
+                animate={{
+                  rotate: 360,
+                  scale: [1, 1.5, 1],
+                }}
+                transition={{
+                  rotate: { duration: 3, repeat: Infinity, ease: 'linear' },
+                  scale: { duration: 1, repeat: Infinity, ease: 'easeInOut', delay: angle / 360 },
+                }}
+                initial={{
+                  x: Math.cos((angle * Math.PI) / 180) * 48 - 4,
+                  y: Math.sin((angle * Math.PI) / 180) * 48 - 4,
+                }}
+              />
+            ))}
           </motion.div>
 
           {/* Loading text */}

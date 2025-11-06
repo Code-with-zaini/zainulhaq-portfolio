@@ -1,6 +1,10 @@
 import { motion } from "framer-motion";
-import { Linkedin, Github, Mail, Download, ExternalLink } from "lucide-react";
+import { Linkedin, Github, Mail, Download, ExternalLink, Send } from "lucide-react";
 import { Button } from "./ui/button";
+import { Input } from "./ui/input";
+import { Textarea } from "./ui/textarea";
+import { useState } from "react";
+import { useToast } from "@/hooks/use-toast";
 
 const contactCards = [
   {
@@ -27,6 +31,33 @@ const contactCards = [
 ];
 
 export function Contact() {
+  const { toast } = useToast();
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    subject: "",
+    message: "",
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    // Simulate form submission
+    setTimeout(() => {
+      toast({
+        title: "✅ Message Sent!",
+        description: "Zain will reply to you soon. Thanks for reaching out!",
+      });
+      setFormData({ name: "", email: "", subject: "", message: "" });
+      setIsSubmitting(false);
+
+      // Trigger chatbot response
+      window.dispatchEvent(new CustomEvent('contact-form-submitted'));
+    }, 1000);
+  };
+
   return (
     <section id="contact" className="py-20 bg-muted/30">
       <div className="container mx-auto px-4">
@@ -70,20 +101,107 @@ export function Contact() {
             ))}
           </div>
 
-          {/* Resume Download */}
+          {/* Contact Form */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="backdrop-blur-xl bg-card p-8 rounded-2xl border-2 border-primary/20 shadow-2xl text-center"
+            className="backdrop-blur-xl bg-card/80 p-8 rounded-2xl border border-border/50 shadow-2xl mb-12"
           >
-            <h3 className="text-2xl font-bold mb-4">Download My Resume</h3>
-            <p className="text-muted-foreground mb-6">
+            <h3 className="text-2xl font-bold mb-2 text-center">Send Me a Message</h3>
+            <p className="text-muted-foreground mb-6 text-center">
+              Have a project or opportunity? Let's discuss!
+            </p>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div className="grid md:grid-cols-2 gap-4">
+                <div>
+                  <label htmlFor="name" className="text-sm font-medium mb-2 block">
+                    Name
+                  </label>
+                  <Input
+                    id="name"
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    required
+                    placeholder="Your name"
+                    className="bg-background/50 border-border/50 focus:border-primary/50 transition-colors"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="email" className="text-sm font-medium mb-2 block">
+                    Email
+                  </label>
+                  <Input
+                    id="email"
+                    type="email"
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    required
+                    placeholder="your.email@example.com"
+                    className="bg-background/50 border-border/50 focus:border-primary/50 transition-colors"
+                  />
+                </div>
+              </div>
+              <div>
+                <label htmlFor="subject" className="text-sm font-medium mb-2 block">
+                  Subject
+                </label>
+                <Input
+                  id="subject"
+                  value={formData.subject}
+                  onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
+                  required
+                  placeholder="What's this about?"
+                  className="bg-background/50 border-border/50 focus:border-primary/50 transition-colors"
+                />
+              </div>
+              <div>
+                <label htmlFor="message" className="text-sm font-medium mb-2 block">
+                  Message
+                </label>
+                <Textarea
+                  id="message"
+                  value={formData.message}
+                  onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                  required
+                  placeholder="Tell me about your project or idea..."
+                  rows={5}
+                  className="bg-background/50 border-border/50 focus:border-primary/50 transition-colors resize-none"
+                />
+              </div>
+              <Button
+                type="submit"
+                size="lg"
+                disabled={isSubmitting}
+                className="w-full bg-gradient-primary hover:opacity-90 transition-opacity group"
+              >
+                <Send className="mr-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                {isSubmitting ? "Sending..." : "Send Message"}
+              </Button>
+            </form>
+          </motion.div>
+
+          {/* Resume Download with shimmer animation */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="backdrop-blur-xl bg-card p-8 rounded-2xl border-2 border-primary/20 shadow-2xl text-center relative overflow-hidden group"
+          >
+            {/* Shimmer effect */}
+            <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+            
+            <h3 className="text-2xl font-bold mb-4 relative z-10">Download My Resume</h3>
+            <p className="text-muted-foreground mb-6 relative z-10">
               Get a comprehensive overview of my skills, experience, and achievements
             </p>
-            <Button size="lg" className="bg-gradient-primary hover:opacity-90 transition-opacity">
-              <Download className="mr-2 h-5 w-5" />
+            <Button 
+              size="lg" 
+              className="bg-gradient-primary hover:opacity-90 transition-opacity relative z-10 group-hover:shadow-lg group-hover:shadow-primary/30"
+            >
+              <Download className="mr-2 h-5 w-5 group-hover:animate-bounce" />
               Download Resume (PDF)
             </Button>
           </motion.div>
