@@ -1,6 +1,23 @@
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
+const TypingText = ({ text, className }: { text: string; className?: string }) => {
+  const [displayText, setDisplayText] = useState('');
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  useEffect(() => {
+    if (currentIndex < text.length) {
+      const timeout = setTimeout(() => {
+        setDisplayText(prev => prev + text[currentIndex]);
+        setCurrentIndex(prev => prev + 1);
+      }, 100);
+      return () => clearTimeout(timeout);
+    }
+  }, [currentIndex, text]);
+
+  return <span className={className}>{displayText}<motion.span animate={{ opacity: [1, 0] }} transition={{ duration: 0.5, repeat: Infinity }}>|</motion.span></span>;
+};
+
 export function Preloader() {
   const [isLoading, setIsLoading] = useState(true);
   const [progress, setProgress] = useState(0);
@@ -103,9 +120,11 @@ export function Preloader() {
             className="text-center"
           >
             <h2 className="text-2xl font-bold bg-gradient-primary bg-clip-text text-transparent mb-2">
-              Initializing...
+              <TypingText text="Initializing..." />
             </h2>
-            <p className="text-muted-foreground">Zain ul Haq Portfolio</p>
+            <p className="text-muted-foreground">
+              <TypingText text="Zain ul Haq Portfolio" />
+            </p>
             
             {/* Progress bar */}
             <div className="mt-6 w-64">
