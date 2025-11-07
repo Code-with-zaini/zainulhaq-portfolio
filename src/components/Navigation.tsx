@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 import { Moon, Sun, Menu, X } from "lucide-react";
 import { useTheme } from "./ThemeProvider";
 import { Button } from "./ui/button";
@@ -140,10 +141,16 @@ export function Navigation() {
 
       {/* Mobile Menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden backdrop-blur-xl bg-card/95 border-t border-border">
+        <motion.div 
+          className="md:hidden backdrop-blur-xl bg-card/95 border-t border-border overflow-hidden"
+          initial={{ height: 0, opacity: 0 }}
+          animate={{ height: "auto", opacity: 1 }}
+          exit={{ height: 0, opacity: 0 }}
+          transition={{ duration: 0.3, ease: "easeInOut" }}
+        >
           <div className="container mx-auto px-4 py-6 flex flex-col gap-4">
-            {navLinks.map((link) => (
-              <a
+            {navLinks.map((link, index) => (
+              <motion.a
                 key={link.name}
                 href={link.href}
                 onClick={(e) => {
@@ -155,17 +162,26 @@ export function Navigation() {
                     ? "text-primary"
                     : "text-foreground/70"
                 }`}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: index * 0.05 }}
+                whileHover={{ x: 10 }}
               >
                 {link.name}
-              </a>
+              </motion.a>
             ))}
-            <a href="#contact">
+            <motion.a 
+              href="#contact"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: navLinks.length * 0.05 }}
+            >
               <Button className="w-full bg-gradient-primary hover:opacity-90 transition-opacity">
                 Hire Me
               </Button>
-            </a>
+            </motion.a>
           </div>
-        </div>
+        </motion.div>
       )}
     </nav>
   );

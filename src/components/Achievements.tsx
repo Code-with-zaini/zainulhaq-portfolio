@@ -90,15 +90,33 @@ export function Achievements() {
             {achievements.map((achievement, index) => (
               <motion.div
                 key={achievement.title}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="backdrop-blur-xl bg-card p-6 rounded-2xl border border-border shadow-lg hover:shadow-2xl hover:border-primary/30 transition-all group text-center"
+                initial={{ opacity: 0, y: 50, rotateX: -15 }}
+                whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{ 
+                  duration: 0.6, 
+                  delay: index * 0.15,
+                  type: "spring",
+                  stiffness: 100
+                }}
+                whileHover={{ 
+                  y: -10,
+                  scale: 1.05,
+                  rotateY: 5,
+                  transition: { type: "spring", stiffness: 300 }
+                }}
+                className="backdrop-blur-xl bg-card p-6 rounded-2xl border border-border shadow-lg hover:shadow-2xl hover:shadow-primary/20 hover:border-primary/50 transition-all group text-center cursor-pointer"
               >
-                <div className="inline-flex p-4 rounded-2xl bg-gradient-primary/10 text-primary group-hover:scale-110 transition-transform mb-4">
+                <motion.div 
+                  className="inline-flex p-4 rounded-2xl bg-gradient-primary/10 text-primary mb-4"
+                  whileHover={{ 
+                    rotate: [0, -10, 10, -10, 0],
+                    scale: 1.2
+                  }}
+                  transition={{ duration: 0.5 }}
+                >
                   <achievement.icon className="h-8 w-8" />
-                </div>
+                </motion.div>
                 <h3 className="text-xl font-bold mb-2">{achievement.title}</h3>
                 <p className="text-muted-foreground text-sm leading-relaxed">
                   {achievement.description}
@@ -137,28 +155,50 @@ export function Achievements() {
                 {certifications.map((cert, index) => (
                   <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
                     <motion.div
-                      initial={{ opacity: 0, scale: 0.95 }}
-                      whileInView={{ opacity: 1, scale: 1 }}
+                      initial={{ opacity: 0, scale: 0.8, y: 30 }}
+                      whileInView={{ opacity: 1, scale: 1, y: 0 }}
                       viewport={{ once: true }}
-                      transition={{ duration: 0.4, delay: index * 0.1 }}
+                      transition={{ 
+                        duration: 0.5, 
+                        delay: index * 0.1,
+                        type: "spring",
+                        stiffness: 100
+                      }}
+                      whileHover={{ scale: 1.05, y: -10 }}
                       className="p-2"
                     >
-                      <div className="group relative overflow-hidden rounded-2xl border-2 border-primary/20 bg-card shadow-lg hover:shadow-2xl hover:border-primary/40 transition-all duration-300">
+                      <motion.div 
+                        className="group relative overflow-hidden rounded-2xl border-2 border-primary/20 bg-card shadow-lg hover:shadow-2xl hover:shadow-primary/20 hover:border-primary/60 transition-all duration-300 cursor-pointer"
+                        whileHover={{ rotateY: 5 }}
+                        transition={{ type: "spring", stiffness: 300 }}
+                      >
                         <div className="aspect-[1.414/1] overflow-hidden">
-                          <img
+                          <motion.img
                             src={cert.image}
                             alt={cert.title}
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                            className="w-full h-full object-cover"
+                            whileHover={{ scale: 1.1 }}
+                            transition={{ duration: 0.6 }}
                           />
                         </div>
-                        <div className="absolute inset-0 bg-gradient-to-t from-background/95 via-background/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                          <div className="absolute bottom-0 left-0 right-0 p-4">
+                        <motion.div 
+                          className="absolute inset-0 bg-gradient-to-t from-background/95 via-background/20 to-transparent"
+                          initial={{ opacity: 0 }}
+                          whileHover={{ opacity: 1 }}
+                          transition={{ duration: 0.3 }}
+                        >
+                          <motion.div 
+                            className="absolute bottom-0 left-0 right-0 p-4"
+                            initial={{ y: 20 }}
+                            whileHover={{ y: 0 }}
+                            transition={{ type: "spring", stiffness: 300 }}
+                          >
                             <h4 className="text-sm font-bold mb-1 line-clamp-2">{cert.title}</h4>
                             <p className="text-xs text-muted-foreground">{cert.issuer}</p>
                             <p className="text-xs text-primary mt-1">{cert.date}</p>
-                          </div>
-                        </div>
-                      </div>
+                          </motion.div>
+                        </motion.div>
+                      </motion.div>
                     </motion.div>
                   </CarouselItem>
                 ))}

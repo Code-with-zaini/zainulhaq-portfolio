@@ -74,11 +74,22 @@ export function Projects() {
           {projects.map((project, index) => (
             <motion.div
               key={project.title}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="backdrop-blur-xl bg-card rounded-2xl border border-border shadow-lg hover:shadow-2xl hover:border-primary/30 transition-all group overflow-hidden flex flex-col"
+              initial={{ opacity: 0, y: 50, rotateX: -20 }}
+              whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ 
+                duration: 0.6, 
+                delay: index * 0.1,
+                type: "spring",
+                stiffness: 100
+              }}
+              whileHover={{ 
+                y: -10, 
+                rotateY: 5,
+                scale: 1.02,
+                transition: { type: "spring", stiffness: 300 }
+              }}
+              className="backdrop-blur-xl bg-card rounded-2xl border border-border shadow-lg hover:shadow-2xl hover:shadow-primary/20 hover:border-primary/50 transition-all group overflow-hidden flex flex-col"
             >
               <div className="p-6 flex-1 flex flex-col">
                 <h3 className="text-xl font-bold mb-3 group-hover:text-primary transition-colors">

@@ -29,13 +29,29 @@ export function Education() {
 
         <div className="max-w-4xl mx-auto">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="backdrop-blur-xl bg-card p-8 md:p-12 rounded-3xl border-2 border-primary/20 shadow-2xl relative overflow-hidden"
+            initial={{ opacity: 0, y: 50, scale: 0.95 }}
+            whileInView={{ opacity: 1, y: 0, scale: 1 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ 
+              duration: 0.8,
+              type: "spring",
+              stiffness: 100
+            }}
+            whileHover={{ scale: 1.01 }}
+            className="backdrop-blur-xl bg-card p-8 md:p-12 rounded-3xl border-2 border-primary/20 shadow-2xl hover:shadow-primary/20 transition-all relative overflow-hidden"
           >
-            <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-primary opacity-10 rounded-full blur-3xl" />
+            <motion.div 
+              className="absolute top-0 right-0 w-64 h-64 bg-gradient-primary opacity-10 rounded-full blur-3xl"
+              animate={{ 
+                scale: [1, 1.2, 1],
+                opacity: [0.1, 0.15, 0.1]
+              }}
+              transition={{
+                duration: 4,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
+            />
             
             <div className="relative z-10">
               <div className="flex items-center gap-4 mb-6">
